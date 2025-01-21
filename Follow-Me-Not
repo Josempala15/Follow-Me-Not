@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Image Website</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@400;700&display=swap');
+
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Josefin Slab', serif;
         }
         .screen {
             display: none;
@@ -15,6 +17,7 @@
             align-items: center;
             height: 100vh;
             background-color: #f0f0f0;
+            position: relative;
         }
         #main-screen {
             display: flex;
@@ -26,28 +29,85 @@
             object-fit: cover;
         }
         button {
-            padding: 10px 20px;
+            padding: 10px 40px;
             font-size: 16px;
-            background-color: #007BFF;
+            background-color: #88A3F8;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            position: absolute;
+            z-index: 10;
+            font-family: 'Josefin Slab', serif;
+        }
+        #enter-button {
+            bottom: 40%;
+        }
+        #secondary-screen button {
+            top: 47%;
+            background-color: #D9D9D9;
+            color: black;
         }
         button:hover {
             background-color: #0056b3;
+        }
+
+        /* Position the username input field over the "Sign in" button */
+        #username-input {
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            position: absolute;
+            z-index: 20;
+            display: none; /* Initially hidden */
+            top: 47%;  /* Align it with the "Sign in" button */
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Third Screen */
+        #third-screen {
+            display: none;
+            background-image: url('https://assets.onecompiler.app/436qhfx89/436qhd6r3/iPhone%2014%20&%2015%20Pro%20Max%20v1.2.png');
+            background-size: cover;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Style for the overlay button on the third screen */
+        #third-screen-button {
+            background-color: #88A3F8;
+            color: white;
+            padding: 10px 40px;
+            font-size: 16px;
+            border-radius: 5px;
+            position: absolute;
+            z-index: 10;
         }
     </style>
 </head>
 <body>
     <!-- Main Screen -->
     <div id="main-screen" class="screen">
-        <img id="uploaded-image" alt="Click to go to the next screen">
+        <button id="enter-button">Enter</button>
+        <img id="uploaded-image" src="https://assets.onecompiler.app/436qhfx89/436qhd6r3/Web%20Homepage-2.png" alt="Click to go to the next screen">
     </div>
-
+  
     <!-- Secondary Screen -->
     <div id="secondary-screen" class="screen">
-        <button onclick="alert('Button Pressed!')">Press Me</button>
+        <button id="sign-in-button">Sign in</button>
+        <img id="uploaded-image" src="https://assets.onecompiler.app/436qhfx89/436qhd6r3/Web%20sign%20in.png" alt="Click to go to the next screen">
+        
+        <!-- Username Input (Positioned over the button) -->
+        <input type="text" id="username-input" placeholder="Enter Instagram Username">
+    </div>
+
+    <!-- Third Screen -->
+    <div id="third-screen" class="screen">
+        <button id="third-screen-button">Go to Instagram</button>
     </div>
 
     <!-- File Upload Section -->
@@ -57,7 +117,12 @@
         const imageUpload = document.getElementById('image-upload');
         const mainScreen = document.getElementById('main-screen');
         const secondaryScreen = document.getElementById('secondary-screen');
+        const thirdScreen = document.getElementById('third-screen');
         const uploadedImage = document.getElementById('uploaded-image');
+        const enterButton = document.getElementById('enter-button');
+        const signInButton = document.getElementById('sign-in-button');
+        const usernameInput = document.getElementById('username-input');
+        const thirdScreenButton = document.getElementById('third-screen-button');
 
         // Show uploaded image on the main screen
         imageUpload.addEventListener('change', (event) => {
@@ -72,11 +137,35 @@
             }
         });
 
-        // Navigate to the secondary screen on image click
-        mainScreen.addEventListener('click', () => {
+        // Navigate to the secondary screen when the button is clicked
+        enterButton.addEventListener('click', (event) => {
+            event.stopPropagation(); // Prevent the click from triggering the main screen click event
             mainScreen.style.display = 'none';
             secondaryScreen.style.display = 'flex';
         });
+
+        // Show username input field when "Sign in" is clicked
+        signInButton.addEventListener('click', () => {
+            usernameInput.style.display = 'block'; // Show the username input field
+            signInButton.style.display = 'none';  // Hide the "Sign in" button
+        });
+
+        // Navigate to the third screen when the user presses "Enter" after entering a username
+        usernameInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                const username = usernameInput.value.trim();
+                if (username) {
+                    // Go to the third screen with the specified URL as the background
+                    secondaryScreen.style.display = 'none';
+                    thirdScreen.style.display = 'flex'; // Show the third screen
+                }
+            }
+        });
+
+        // Redirect to Instagram when "Go to Instagram" button is clicked
+        thirdScreenButton.addEventListener('click', () => {
+            window.location.href = 'https://www.instagram.com';
+        })
     </script>
 </body>
 </html>
